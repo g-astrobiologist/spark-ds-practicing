@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  pyspark-notebook:
+    image: quay.io/jupyter/pyspark-notebook:latest
+    restart: unless-stopped
+    environment:
+      - PYTHONPATH=/app
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/project
+      - ./docker_portal:/project/docker_portal
+    user: "1000:1000"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8888 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
